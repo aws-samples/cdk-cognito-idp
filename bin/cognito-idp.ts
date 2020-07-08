@@ -17,9 +17,6 @@ if (fs.existsSync(localConfigPath)) {
     const localStack = new CognitoIdpStack(app, 'CognitoIdp-Local', require('.' + localConfigPath));
 }
 
-// Delete this and replace it with environment-specific stacks like prodStack below
-// const placeholderStack = new cdk.Stack(app, 'Placeholder');
-
 // tslint:disable-next-line: no-var-requires
 const prodStack = new CognitoIdpStack(app, 'CognitoIdp-Prod', require('../config/env-prod.json'));
 
