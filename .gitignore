@@ -1,0 +1,28 @@
+*.js
+!jest.config.js
+!create-config.js
+!clean.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# Parcel build directories
+.cache
+.build
+
+build/
+dist/
+
+.env
+.env*
+config/env-local.json
+
+# Synth file for troubleshooting
+s.json
+
+bundle.js
+cdk.context.json
+
