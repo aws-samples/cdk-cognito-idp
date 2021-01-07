@@ -160,37 +160,6 @@ export class CognitoIdpStack extends cdk.Stack {
             exportName: 'CognitoIDPUserPoolId'
         });
 
-        // // This solves an error that can be very difficult to troubleshoot when using federation.
-        // // User attributes must be mutable, even though we never change them. When created 
-        // // via the console, they are mutable, but via Cfn they are not mutable by default.
-        // const userPoolCfn = userPool.node.defaultChild as cognito.CfnUserPool;
-        // userPoolCfn.schema = [{
-        //     name: 'email',
-        //     attributeDataType: "String",
-        //     mutable: true,
-        //     required: false,
-        //     stringAttributeConstraints: {
-        //         maxLength: "128"
-        //     }
-        // }, {
-        //     name: 'given_name',
-        //     attributeDataType: "String",
-        //     mutable: true,
-        //     required: false,
-        //     stringAttributeConstraints: {
-        //         maxLength: "128"
-        //     }
-        // }, {
-        //     name: 'family_name',
-        //     attributeDataType: "String",
-        //     mutable: true,
-        //     required: false,
-        //     stringAttributeConstraints: {
-        //         maxLength: "128"
-        //     }
-        // },
-        // ];
-
         // Set up an admin group in the user pool
         const adminsGroup = new cognito.CfnUserPoolGroup(this, "AdminsGroup", {
             userPoolId: userPool.userPoolId
@@ -212,7 +181,7 @@ export class CognitoIdpStack extends cdk.Stack {
             userPool,
             attributeMapping: {
                 email: cognito.ProviderAttribute.FACEBOOK_EMAIL,
-                familyName: cognito.ProviderAttribute.FACEBOOK_LAST_NAME, 
+                familyName: cognito.ProviderAttribute.FACEBOOK_LAST_NAME,
                 givenName: cognito.ProviderAttribute.FACEBOOK_FIRST_NAME
             }
         });
@@ -221,11 +190,7 @@ export class CognitoIdpStack extends cdk.Stack {
         const userPoolClient = new cognito.UserPoolClient(this, 'CognitoAppClient', {
             userPool,
             authFlows: {
-                userPassword: true,
-                refreshToken: true // TODO - This is required by Cfn, needs validation
-                // REFRESH_TOKEN_AUTH should always be allowed. 
-                // (Service: AWSCognitoIdentityProviderService; Status Code: 400; 
-                // Error Code: InvalidParameterException; ...
+                userPassword: true
             },
             oAuth: {
                 flows: {
@@ -237,7 +202,7 @@ export class CognitoIdpStack extends cdk.Stack {
                     cognito.OAuthScope.PROFILE,
                     cognito.OAuthScope.OPENID
                 ],
-                callbackUrls: [redirectUri] 
+                callbackUrls: [redirectUri]
                 // TODO - What about logoutUrls?
             },
             generateSecret: false,
@@ -320,7 +285,7 @@ export class CognitoIdpStack extends cdk.Stack {
             additionalEnvVars: {
                 "USER_TABLE": userTable.tableName
             },
-            resourceHandlers: handlers, 
+            resourceHandlers: handlers,
             hostedZoneId: props.apiHostedZoneId
         });
 
@@ -329,7 +294,7 @@ export class CognitoIdpStack extends cdk.Stack {
         const site = new StaticSite(this, 'StaticSite', {
             domainName: props.webDomainName,
             certificateArn: props.webCertificateArn,
-            contentPath: './dist/web', 
+            contentPath: './dist/web',
             hostedZoneId: props.hostedZoneId
         });
 
@@ -364,8 +329,8 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Create the custom resource
         const customResource = new cdk.CustomResource(this, 'ConfigFileResource', {
-            serviceToken: provider.serviceToken, 
-            properties: { 
+            serviceToken: provider.serviceToken,
+            properties: {
                 'FORCE_UPDATE': new Date().toISOString()
             }
         });
