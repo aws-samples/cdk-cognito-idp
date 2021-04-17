@@ -222,7 +222,7 @@ export class CognitoIdpStack extends cdk.Stack {
             userPool,
             authFlows: {
                 userPassword: true,
-                refreshToken: true // TODO - This is required by Cfn, needs validation
+                // refreshToken: true // TODO - This is required by Cfn, needs validation
                 // REFRESH_TOKEN_AUTH should always be allowed. 
                 // (Service: AWSCognitoIdentityProviderService; Status Code: 400; 
                 // Error Code: InvalidParameterException; ...
