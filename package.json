@@ -39,7 +39,7 @@
     "@types/node": "10.17.5",
     "@types/qs": "^6.9.2",
     "@types/uuid": "^7.0.3",
-    "aws-cdk": "^1.50.0",
+    "aws-cdk": "^1.98.0",
     "browserify": "^16.5.1",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
