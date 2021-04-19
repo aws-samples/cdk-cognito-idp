@@ -9,6 +9,9 @@
 			"VARIANT": "14"
 		}
 	},
+	"mounts": [
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws/credentials,target=/home/node/.aws/credentials,type=bind"
+	],
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
