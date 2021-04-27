@@ -1,5 +1,6 @@
 import { User } from './entities/user';
 import * as uuid from 'uuid';
+import * as AWS from 'aws-sdk';
 
 /**
  * This class abstracts database access for use by API endpoint handlers.
