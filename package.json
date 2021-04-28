@@ -42,6 +42,7 @@
     "typescript": "~3.9.9"
   },
   "dependencies": {
+    "@aws-cdk/assert": "^2.0.0-alpha.14",
     "@types/facebook-js-sdk": "^3.3.0",
     "@types/js-cookie": "^2.2.6",
     "aws-cdk-lib": "^2.0.0-alpha.4",
