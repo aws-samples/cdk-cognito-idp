@@ -1,13 +1,13 @@
-import * as route53 from '@aws-cdk/aws-route53';
-import * as targets from '@aws-cdk/aws-route53-targets/lib';
-import { Construct } from '@aws-cdk/core';
-import * as apigw from '@aws-cdk/aws-apigateway';
+import { Construct }  from 'constructs';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import * as util from '../lambda/util';
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as acm from '@aws-cdk/aws-certificatemanager';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { ResourceHandler } from './resource-handler';
 import { ResourceHandlerProps } from './resource-handler-props';
-import * as lambda from '@aws-cdk/aws-lambda';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 
 /**
  * Properties needed to configure the static site.

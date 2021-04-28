@@ -1,7 +1,8 @@
-import * as cdk from '@aws-cdk/core';
-import lambda = require('@aws-cdk/aws-lambda');
-import { AuthorizationType } from "@aws-cdk/aws-apigateway";
-import apigw = require('@aws-cdk/aws-apigateway');
+import { Construct }  from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import lambda = require('aws-cdk-lib/aws-lambda');
+import { AuthorizationType } from "aws-cdk-lib/aws-apigateway";
+import apigw = require('aws-cdk-lib/aws-apigateway');
 import { ResourceHandlerProps } from './resource-handler-props';
 
 /**
@@ -18,7 +19,7 @@ import { ResourceHandlerProps } from './resource-handler-props';
 export class ResourceHandler {
 
     constructor(
-        private parent: cdk.Construct,
+        private parent: Construct,
         private stackName: string,
         private envVars: any,
         private api: apigw.RestApi,

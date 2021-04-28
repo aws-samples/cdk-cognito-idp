@@ -1,4 +1,4 @@
-import * as lambda from '@aws-cdk/aws-lambda';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 
 /**
  * Properties to configure an API Gateway resource handler.

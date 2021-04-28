@@ -22,7 +22,7 @@ There is a bit of setup required before you can deploy this stack.
     - https://docs.aws.amazon.com/acm/latest/userguide/gs.html
 - A Facebook Developer account
     - Create an app and put the app id into your .env
-    - Store the app secret in AWS Secrets Manager as facebook_app_secret
+    - Store the app secret in AWS Secrets Manager as facebook\_app\_secret
     - https://developers.facebook.com/docs/facebook-login/
     - https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-social-idp.html
     - (Don't follow the separate guide for integrating Facebook with Identity Pools)

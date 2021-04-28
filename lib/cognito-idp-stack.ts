@@ -1,17 +1,18 @@
-import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigw from '@aws-cdk/aws-apigateway';
-import * as iam from '@aws-cdk/aws-iam';
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as acm from '@aws-cdk/aws-certificatemanager';
+import { Construct }  from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { StaticSite } from './static-site';
 import { ResourceHandlerProps } from './resource-handler-props';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as secrets from '@aws-cdk/aws-secretsmanager';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as targets from '@aws-cdk/aws-route53-targets';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as secrets from 'aws-cdk-lib/aws-secretsmanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import { CognitoRestApiProps, CognitoRestApi } from './cognito-rest-api';
-import * as cr from '@aws-cdk/custom-resources';
+import * as cr from 'aws-cdk-lib/custom-resources';
 
 /**
  * Environment variables needed to deploy the stack.
@@ -89,7 +90,7 @@ export interface CognitoIdpStackProps extends cdk.StackProps {
  * - Auth (Cognito)
  */
 export class CognitoIdpStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: CognitoIdpStackProps) {
+    constructor(scope: Construct, id: string, props: CognitoIdpStackProps) {
         super(scope, id, props);
 
         if (!props.env) {
@@ -170,7 +171,7 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Amazon Federate Client Secret
         const secret = secrets.Secret.fromSecretAttributes(this, 'FederateSecret', {
-            secretArn: props.facebookSecretArn,
+            secretCompleteArn: props.facebookSecretArn,
         });
 
         // Facebook IDP
@@ -245,7 +246,7 @@ export class CognitoIdpStack extends cdk.Stack {
                 table.grantReadWriteData(f);
 
                 // Give permissions to indexes manually
-                f.role?.addToPolicy(new iam.PolicyStatement({
+                f.role?.addToPrincipalPolicy(new iam.PolicyStatement({
                     actions: ['dynamodb:*'],
                     resources: [`${table.tableArn}/index/*`],
                 }));
