@@ -1,5 +1,5 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 import { handler } from '../lambda/unit';
 import { APIGatewayEvent } from 'aws-lambda';
 import { Database } from '../lambda/database';

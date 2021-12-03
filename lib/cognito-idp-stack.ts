@@ -1,17 +1,18 @@
-import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigw from '@aws-cdk/aws-apigateway';
-import * as iam from '@aws-cdk/aws-iam';
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as acm from '@aws-cdk/aws-certificatemanager';
+import { Construct }  from 'constructs';
+import * as cdk from 'aws-cdk-lib';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { StaticSite } from './static-site';
 import { ResourceHandlerProps } from './resource-handler-props';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as secrets from '@aws-cdk/aws-secretsmanager';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as targets from '@aws-cdk/aws-route53-targets';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as secrets from 'aws-cdk-lib/aws-secretsmanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import { CognitoRestApiProps, CognitoRestApi } from './cognito-rest-api';
-import * as cr from '@aws-cdk/custom-resources';
+import * as cr from 'aws-cdk-lib/custom-resources';
 
 /**
  * Environment variables needed to deploy the stack.
@@ -89,7 +90,7 @@ export interface CognitoIdpStackProps extends cdk.StackProps {
  * - Auth (Cognito)
  */
 export class CognitoIdpStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: CognitoIdpStackProps) {
+    constructor(scope: Construct, id: string, props: CognitoIdpStackProps) {
         super(scope, id, props);
 
         if (!props.env) {
@@ -160,37 +161,6 @@ export class CognitoIdpStack extends cdk.Stack {
             exportName: 'CognitoIDPUserPoolId'
         });
 
-        // // This solves an error that can be very difficult to troubleshoot when using federation.
-        // // User attributes must be mutable, even though we never change them. When created 
-        // // via the console, they are mutable, but via Cfn they are not mutable by default.
-        // const userPoolCfn = userPool.node.defaultChild as cognito.CfnUserPool;
-        // userPoolCfn.schema = [{
-        //     name: 'email',
-        //     attributeDataType: "String",
-        //     mutable: true,
-        //     required: false,
-        //     stringAttributeConstraints: {
-        //         maxLength: "128"
-        //     }
-        // }, {
-        //     name: 'given_name',
-        //     attributeDataType: "String",
-        //     mutable: true,
-        //     required: false,
-        //     stringAttributeConstraints: {
-        //         maxLength: "128"
-        //     }
-        // }, {
-        //     name: 'family_name',
-        //     attributeDataType: "String",
-        //     mutable: true,
-        //     required: false,
-        //     stringAttributeConstraints: {
-        //         maxLength: "128"
-        //     }
-        // },
-        // ];
-
         // Set up an admin group in the user pool
         const adminsGroup = new cognito.CfnUserPoolGroup(this, "AdminsGroup", {
             userPoolId: userPool.userPoolId
@@ -201,7 +171,7 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Amazon Federate Client Secret
         const secret = secrets.Secret.fromSecretAttributes(this, 'FederateSecret', {
-            secretArn: props.facebookSecretArn,
+            secretCompleteArn: props.facebookSecretArn,
         });
 
         // Facebook IDP
@@ -212,7 +182,7 @@ export class CognitoIdpStack extends cdk.Stack {
             userPool,
             attributeMapping: {
                 email: cognito.ProviderAttribute.FACEBOOK_EMAIL,
-                familyName: cognito.ProviderAttribute.FACEBOOK_LAST_NAME, 
+                familyName: cognito.ProviderAttribute.FACEBOOK_LAST_NAME,
                 givenName: cognito.ProviderAttribute.FACEBOOK_FIRST_NAME
             }
         });
@@ -221,11 +191,7 @@ export class CognitoIdpStack extends cdk.Stack {
         const userPoolClient = new cognito.UserPoolClient(this, 'CognitoAppClient', {
             userPool,
             authFlows: {
-                userPassword: true,
-                refreshToken: true // TODO - This is required by Cfn, needs validation
-                // REFRESH_TOKEN_AUTH should always be allowed. 
-                // (Service: AWSCognitoIdentityProviderService; Status Code: 400; 
-                // Error Code: InvalidParameterException; ...
+                userPassword: true
             },
             oAuth: {
                 flows: {
@@ -237,7 +203,7 @@ export class CognitoIdpStack extends cdk.Stack {
                     cognito.OAuthScope.PROFILE,
                     cognito.OAuthScope.OPENID
                 ],
-                callbackUrls: [redirectUri] 
+                callbackUrls: [redirectUri]
                 // TODO - What about logoutUrls?
             },
             generateSecret: false,
@@ -280,7 +246,7 @@ export class CognitoIdpStack extends cdk.Stack {
                 table.grantReadWriteData(f);
 
                 // Give permissions to indexes manually
-                f.role?.addToPolicy(new iam.PolicyStatement({
+                f.role?.addToPrincipalPolicy(new iam.PolicyStatement({
                     actions: ['dynamodb:*'],
                     resources: [`${table.tableArn}/index/*`],
                 }));
@@ -320,7 +286,7 @@ export class CognitoIdpStack extends cdk.Stack {
             additionalEnvVars: {
                 "USER_TABLE": userTable.tableName
             },
-            resourceHandlers: handlers, 
+            resourceHandlers: handlers,
             hostedZoneId: props.apiHostedZoneId
         });
 
@@ -329,7 +295,7 @@ export class CognitoIdpStack extends cdk.Stack {
         const site = new StaticSite(this, 'StaticSite', {
             domainName: props.webDomainName,
             certificateArn: props.webCertificateArn,
-            contentPath: './dist/web', 
+            contentPath: './dist/web',
             hostedZoneId: props.hostedZoneId
         });
 
@@ -364,8 +330,8 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Create the custom resource
         const customResource = new cdk.CustomResource(this, 'ConfigFileResource', {
-            serviceToken: provider.serviceToken, 
-            properties: { 
+            serviceToken: provider.serviceToken,
+            properties: {
                 'FORCE_UPDATE': new Date().toISOString()
             }
         });

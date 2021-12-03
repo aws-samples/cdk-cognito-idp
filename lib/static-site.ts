@@ -1,11 +1,12 @@
-import * as cloudfront from '@aws-cdk/aws-cloudfront';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as s3 from '@aws-cdk/aws-s3';
-import * as s3deploy from '@aws-cdk/aws-s3-deployment';
-import * as cdk from '@aws-cdk/core';
-import * as targets from '@aws-cdk/aws-route53-targets/lib';
-import { PolicyStatement, CanonicalUserPrincipal } from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
+import { Construct }  from 'constructs';
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as cdk from 'aws-cdk-lib';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
+import { PolicyStatement, CanonicalUserPrincipal } from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 /**
  * Properties needed to configure the static site.
  */
@@ -25,13 +26,13 @@ export interface StaticSiteProps {
  * certificate for the web app subdomain. You must do those manually before 
  * deploying.
  */
-export class StaticSite extends cdk.Construct {
+export class StaticSite extends Construct {
 
     private bucketName: string;
     private siteBucket: s3.Bucket;
     private deployment: s3deploy.BucketDeployment;
 
-    constructor(parent: cdk.Construct, name: string, props: StaticSiteProps) {
+    constructor(parent: Construct, name: string, props: StaticSiteProps) {
         super(parent, name);
 
         // Reference the hosted zone (this does not require a context lookup)
@@ -71,11 +72,19 @@ export class StaticSite extends cdk.Construct {
 
         // CloudFront
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
-            aliasConfiguration: {
-                acmCertRef: props.certificateArn,
-                names: [props.domainName],
-                sslMethod: cloudfront.SSLMethod.SNI,
-                securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
+            // aliasConfiguration: {
+            //     acmCertRef: props.certificateArn,
+            //     names: [props.domainName],
+            //     sslMethod: cloudfront.SSLMethod.SNI,
+            //     securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
+            // },
+            viewerCertificate: {
+                aliases: [props.domainName],
+                props: {
+                    acmCertificateArn: props.certificateArn,
+                    sslSupportMethod: cloudfront.SSLMethod.SNI,
+                    minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
+                },
             },
             originConfigs: [
                 {
@@ -84,8 +93,8 @@ export class StaticSite extends cdk.Construct {
                         originAccessIdentity: cloudfront.OriginAccessIdentity.fromOriginAccessIdentityName(this, 'OAIRef', oai.ref)
                     },
                     behaviors: [{ isDefaultBehavior: true }]
-                }
-            ]
+                },
+            ],
         });
 
         // Output the distribution ID
@@ -96,7 +105,7 @@ export class StaticSite extends cdk.Construct {
         // Route53 alias record for the CloudFront distribution
         const aout = new route53.ARecord(this, 'SiteAliasRecord', {
             recordName: props.domainName,
-            target: route53.AddressRecordTarget.fromAlias(
+            target: route53.RecordTarget.fromAlias(
                 new targets.CloudFrontTarget(distribution)),
             zone
         });
