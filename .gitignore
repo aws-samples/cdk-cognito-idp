@@ -25,4 +25,5 @@ s.json
 
 bundle.js
 cdk.context.json
+.DS_Store
 

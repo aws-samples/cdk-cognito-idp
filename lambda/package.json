@@ -9,15 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.893.0",
-    "axios": "^0.21.1",
+    "aws-sdk": "^2.1042.0",
+    "axios": "^0.21.4",
     "csv-writer": "^1.6.0",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "jsonwebtoken": "^8.5.1",
-    "jwk-to-pem": "^2.0.3",
-    "qs": "^6.9.3"
+    "jwk-to-pem": "^2.0.5",
+    "qs": "^6.10.1"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.3.9"
+    "@types/jsonwebtoken": "^8.5.6"
   }
 }
