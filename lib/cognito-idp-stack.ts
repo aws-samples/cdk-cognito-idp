@@ -303,7 +303,7 @@ export class CognitoIdpStack extends cdk.Stack {
         // (The web site needs deploy-time values, so this fixes some of the chicken 
         // and egg problems with the .env file)
         const onEvent = new lambda.Function(this, 'CreateConfigHandler', {
-            runtime: lambda.Runtime.NODEJS_12_X,
+            runtime: lambda.Runtime.NODEJS_14_X,
             code: lambda.Code.fromAsset('./dist/lambda'),
             handler: `create-config.handler`,
             memorySize: 1536,

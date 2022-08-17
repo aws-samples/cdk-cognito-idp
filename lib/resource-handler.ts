@@ -61,7 +61,7 @@ export class ResourceHandler {
         const lambdaName = `${resourceName}-${verb}`;
 
         const lf = new lambda.Function(this.parent, lambdaName, {
-            runtime: lambda.Runtime.NODEJS_12_X,
+            runtime: lambda.Runtime.NODEJS_14_X,
             code: lambda.Code.fromAsset(this.lambdaFunctionDirectory),
             handler: `${resourceName}-${verb}.handler`,
             memorySize: 1536,
