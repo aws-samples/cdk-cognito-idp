@@ -33,7 +33,6 @@
     "dotenv": "^8.6.0",
     "fs-extra": "^9.0.1",
     "jest-runner-groups": "^2.2.0",
-    "rocketcdk": "^0.1.1",
     "tsify": "^4.0.2",
     "tslint": "^6.1.2"
   },
