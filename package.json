@@ -42,7 +42,7 @@
     "@types/js-cookie": "^2.2.7",
     "aws-cdk-lib": "^2.0.0",
     "aws-cdk-migration": "^1.134.0",
-    "aws-sdk": "^2.1042.0",
+    "aws-sdk": "^2.1354.0",
     "axios": "^0.21.4",
     "constructs": "^10.0.9",
     "csv-writer": "^1.6.0",
