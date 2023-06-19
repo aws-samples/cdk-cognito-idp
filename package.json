@@ -40,7 +40,7 @@
     "@aws-cdk/assert": "^2.0.0",
     "@types/facebook-js-sdk": "^3.3.5",
     "@types/js-cookie": "^2.2.7",
-    "aws-cdk-lib": "^2.0.0",
+    "aws-cdk-lib": "^2.80.0",
     "aws-cdk-migration": "^1.134.0",
     "aws-sdk": "^2.1354.0",
     "axios": "^0.21.4",
