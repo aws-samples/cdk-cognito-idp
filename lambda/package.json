@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1042.0",
-    "axios": "^0.21.4",
+    "axios": "^1.6.0",
     "csv-writer": "^1.6.0",
     "dotenv": "^8.6.0",
     "jsonwebtoken": "^9.0.0",
